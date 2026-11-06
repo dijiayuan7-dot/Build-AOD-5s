@@ -25,8 +25,14 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Check project files
+        run: |
+          pwd
+          ls -la
+          ls -la app
+
       - name: Build APK
-        run: gradle --no-daemon assembleDebug
+        run: gradle --no-daemon assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
