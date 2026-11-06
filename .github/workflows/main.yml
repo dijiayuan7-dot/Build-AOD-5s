@@ -20,24 +20,31 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Find project
+        id: project
+        run: |
+          FILE=$(find . -name settings.gradle -o -name settings.gradle.kts | head -n 1)
+          if [ -z "$FILE" ]; then
+            echo "找不到 settings.gradle"
+            find . -maxdepth 5 -type f
+            exit 1
+          fi
+          DIR=$(dirname "$FILE")
+          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
+          echo "项目目录：$DIR"
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
-      - name: Check files
-        run: |
-          pwd
-          ls -la
-          ls -la Aod5sLSPosed-source/Aod5sLSPosed
-
       - name: Build APK
-        working-directory: Aod5sLSPosed-source/Aod5sLSPosed
+        working-directory: ${{ steps.project.outputs.dir }}
         run: gradle --no-daemon assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: AOD5S-build
-          path: Aod5sLSPosed-source/Aod5sLSPosed/app/build/outputs/apk/debug/*.apk
+          path: '**/app/build/outputs/apk/debug/*.apk'
           if-no-files-found: error
