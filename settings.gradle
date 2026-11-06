@@ -1,8 +1,21 @@
-pluginManagement repositories {
-    google()
-    mavenCentral()
-    maven { url 'https://api.xposed.info/' }
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
 }
-dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://api.xposed.info/")
+        }
+    }
+}
+
 rootProject.name = 'Aod5sLSPosed'
 include ':app'
